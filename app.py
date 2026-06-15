@@ -1,5 +1,9 @@
 import re
-import streamlit
+import streamlit as st
+import streamlit.components.v1 as components
+
+# Set up the Streamlit page
+st.set_page_config(page_title="Materials Engineering", layout="wide")
 
 raw_data = """Section 1: Material Structure & Characterization (Lecture 10)
 Which level of structure can be observed with the naked eye?
@@ -702,7 +706,6 @@ while i < len(lines):
                 if answer_line.startswith("Answer:"):
                     ans_letter = answer_line.split(":")[1].strip()
                     
-                    # More robust parsing for options
                     match = re.search(r'A\)(.*?)B\)(.*?)C\)(.*?)D\)(.*)', options_line)
                     ans_text = ""
                     
@@ -713,7 +716,6 @@ while i < len(lines):
                         elif ans_letter == "C": ans_text = opt_c
                         elif ans_letter == "D": ans_text = opt_d
                     else:
-                        # Fallback if the regex doesn't catch it
                         ans_text = f"Option {ans_letter}"
 
                     html_content += f'''
@@ -726,8 +728,5 @@ while i < len(lines):
 
 html_content += "</body></html>"
 
-file_path = '/mnt/data/Materials_Engineering_Study_Sheet.html'
-with open(file_path, 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print(f"File saved to {file_path}")
+# This uses Streamlit's component to render the HTML visually on the app
+components.html(html_content, height=800, scrolling=True)
